@@ -1,76 +1,186 @@
-import streamlit as st
+from flask import Flask, render_template, request, jsonify
 import numpy as np
-import cv2
-import tensorflow as tf
+import os
+from datetime import datetime
+import time
 
-st.set_page_config(
-    page_title="Malaria Detection System",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+app = Flask(__name__)
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-model = tf.keras.models.load_model("malaria_model.h5")
-IMG_SIZE = 96
+model = None
+MODEL_ERROR = None
+MODEL_PATH = None
+CLASS_NAMES = ['Parasitized', 'Uninfected']
+MODEL_DISPLAY_NAME = "MobileNetV2 (Fine-Tuned)"
 
-# ---------------- Sidebar ----------------
-st.sidebar.title("Model Information")
-st.sidebar.markdown("""
-**Model Type:** CNN  
-**Validation Accuracy:** 93%  
-**Classes:** Parasitized / Uninfected  
-**Dataset:** NIH Malaria Cell Images  
-""")
+print("\n" + "="*70)
+print("🦠 MALARIA DETECTION - LOADING MODEL")
+print("="*70)
 
-# ---------------- Header ----------------
-st.title("Malaria Detection System")
-st.caption("Deep Learning Based Microscopic Blood Cell Classification")
+# =======================
+# Load Model (.keras)
+# =======================
+try:
+    import tensorflow as tf
+    from PIL import Image
+    print("✓ TensorFlow imported")
+except Exception as e:
+    MODEL_ERROR = f"Import failed: {e}"
+    print(f"✗ {MODEL_ERROR}")
 
-st.markdown("---")
+if MODEL_ERROR is None:
+    current_dir = os.getcwd()
 
-# ---------------- Upload Section ----------------
-uploaded_file = st.file_uploader(
-    "Upload Microscopic Blood Cell Image",
-    type=["jpg", "jpeg", "png"]
-)
+    try:
+        model_files = [f for f in os.listdir(current_dir) if f.endswith('.keras')]
 
-if uploaded_file is not None:
+        if model_files:
+            MODEL_PATH = os.path.join(current_dir, model_files[0])
+            print(f"✓ Found model: {model_files[0]}")
 
-    col1, col2 = st.columns([1, 1.2])
+            model = tf.keras.models.load_model(MODEL_PATH, compile=False)
+            model.compile(
+                optimizer='adam',
+                loss='binary_crossentropy',
+                metrics=['accuracy']
+            )
 
-    file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
-    img = cv2.imdecode(file_bytes, 1)
-
-    # Display Image
-    with col1:
-        st.subheader("Uploaded Image")
-        st.image(img, width=320)
-
-    # Prediction
-    with st.spinner("Analyzing image..."):
-        img_resized = cv2.resize(img, (IMG_SIZE, IMG_SIZE))
-        img_resized = img_resized / 255.0
-        img_resized = np.reshape(img_resized, (1, IMG_SIZE, IMG_SIZE, 3))
-        prediction = model.predict(img_resized)[0][0]
-
-    prob_uninfected = float(prediction)
-    prob_parasitized = float(1 - prediction)
-
-    # Display Result
-    with col2:
-        st.subheader("Prediction Result")
-
-        if prediction > 0.5:
-            st.success("Uninfected")
+            print(f"✓ Model Loaded")
+            print(f"Input Shape: {model.input_shape}")
+            print(f"Output Shape: {model.output_shape}")
         else:
-            st.warning("Parasitized")
+            MODEL_ERROR = "No .keras model file found"
+            print(f"✗ {MODEL_ERROR}")
 
-        st.markdown("#### Confidence Scores")
+    except Exception as e:
+        MODEL_ERROR = str(e)
+        print(f"✗ {MODEL_ERROR}")
 
-        st.progress(prob_parasitized)
-        st.write(f"Parasitized: {prob_parasitized*100:.2f}%")
 
-        st.progress(prob_uninfected)
-        st.write(f"Uninfected: {prob_uninfected*100:.2f}%")
+# =======================
+# Image Preprocessing
+# =======================
+def prepare_image(image_file):
+    if model is None:
+        return None
 
-st.markdown("---")
-st.caption("Developed using TensorFlow and Streamlit")
+    try:
+        img = Image.open(image_file)
+
+        if img.mode != 'RGB':
+            img = img.convert('RGB')
+
+        input_shape = model.input_shape
+
+        img_size = (input_shape[1], input_shape[2])
+        img = img.resize(img_size)
+
+        img_array = np.array(img, dtype='float32') / 255.0
+        img_array = np.expand_dims(img_array, axis=0)
+
+        return img_array
+
+    except Exception as e:
+        print(f"Image processing error: {e}")
+        return None
+
+
+# =======================
+# Routes
+# =======================
+
+@app.route('/')
+def home():
+    model_name = "MobileNetV2 (Fine-Tuned)"
+    return render_template('index.html')
+
+
+@app.route('/predict', methods=['POST'])
+def predict():
+
+    global MODEL_PATH
+
+    if model is None:
+        return jsonify({'success': False, 'error': 'Model not loaded'}), 500
+
+    try:
+        if 'file' not in request.files:
+            return jsonify({'success': False, 'error': 'No file uploaded'}), 400
+
+        file = request.files['file']
+
+        if file.filename == '':
+            return jsonify({'success': False, 'error': 'No file selected'}), 400
+
+        # =====================
+        # Save uploaded image
+        # =====================
+        upload_folder = os.path.join('static', 'uploads')
+        os.makedirs(upload_folder, exist_ok=True)
+
+        image_path = os.path.join(upload_folder, file.filename)
+        file.save(image_path)
+
+        # =====================
+        # Prepare image
+        # =====================
+        img_array = prepare_image(image_path)
+
+        if img_array is None:
+            return jsonify({'success': False, 'error': 'Image processing failed'}), 500
+
+        # =====================
+        # Predict
+        # =====================
+        start_time = time.time()
+        prediction = model.predict(img_array, verbose=0)
+        end_time = time.time()
+
+        prob = float(prediction[0][0])
+        processing_time = round(end_time - start_time, 2)
+
+        if prob > 0.5:
+            result = "Uninfected"
+            confidence = prob * 100
+            parasitized_prob = (1 - prob) * 100
+            uninfected_prob = prob * 100
+        else:
+            result = "Parasitized"
+            confidence = (1 - prob) * 100
+            parasitized_prob = (1 - prob) * 100
+            uninfected_prob = prob * 100
+
+        model_name = os.path.basename(MODEL_PATH) if MODEL_PATH else "Loaded Model"
+        model_name = model_name.replace('.keras', '')
+
+        return render_template(
+            'result.html',
+            prediction=result,
+            confidence=round(confidence, 2),
+            parasitized_prob=round(parasitized_prob, 2),
+            uninfected_prob=round(uninfected_prob, 2),
+            processing_time=processing_time,
+            timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            image_file=file.filename,
+            model_name=model_name
+        )
+
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/health')
+def health():
+    return jsonify({
+        'status': 'running',
+        'model_loaded': model is not None
+    })
+
+
+if __name__ == '__main__':
+    print("\n" + "="*70)
+    print(f"{'✓' if model else '✗'} Model: {'LOADED' if model else 'NOT LOADED'}")
+    print("🌐 Server: http://127.0.0.1:5000")
+    print("="*70 + "\n")
+
+    app.run(debug=True, host='127.0.0.1', port=5000, use_reloader=False)
