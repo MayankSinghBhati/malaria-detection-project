@@ -1,4 +1,4 @@
-🧬 Malaria Detection using Deep Learning
+🧬 #Malaria Detection using Deep Learning
 📌 Overview
 
 This project implements a Deep Learning-based system to detect malaria infection from microscopic blood smear images.
