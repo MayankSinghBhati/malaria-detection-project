@@ -1,5 +1,5 @@
-🧬 Malaria Detection using Deep Learning
-📌 Overview
+# 🧬 Malaria Detection using Deep Learning
+## 📌 Overview
 
 This project implements a Deep Learning-based system to detect malaria infection from microscopic blood smear images.
 
@@ -11,7 +11,7 @@ Uninfected
 
 Multiple architectures were trained and compared. The final deployed model uses MobileNetV2 (Fine-Tuned Transfer Learning) and is integrated into a Flask web application for real-time prediction.
 
-🎯 Problem Statement
+## 🎯 Problem Statement
 
 Traditional malaria diagnosis relies on manual microscopic examination of blood smear images. This process:
 
@@ -25,7 +25,7 @@ May be prone to human error
 
 This project demonstrates how Deep Learning can assist in automating malaria detection and supporting faster preliminary screening.
 
-📂 Dataset
+## 📂 Dataset
 
 Dataset: NIH Malaria Cell Images
 
@@ -37,17 +37,17 @@ Train–Validation Split: 80% Training, 20% Validation
 
 Image Size Used: 96 × 96 pixels
 
-🔹 Preprocessing
+## 🔹 Preprocessing
 
 Images resized to 96×96
 
 Pixel values normalized to range [0, 1]
 
-🧠 Model Development
+## 🧠 Model Development
 
 Three different models were trained and evaluated:
 
-1️⃣ Custom CNN
+**1️⃣ Custom CNN**
 
 Validation Accuracy: ~94%
 
@@ -65,7 +65,7 @@ Dense Layers
 
 Sigmoid Output
 
-2️⃣ MobileNetV2 (Transfer Learning – Selected Model)
+**2️⃣ MobileNetV2 (Transfer Learning – Selected Model)**
 
 Validation Accuracy: ~93%
 
@@ -79,13 +79,13 @@ Fine-tuned final layers
 
 Scalable architecture
 
-3️⃣ EfficientNetB0
+**3️⃣ EfficientNetB0**
 
 Validation Accuracy: ~50%
 
 Underperformed at 96×96 resolution and was not selected for deployment.
 
-⚙️ Training Configuration
+## ⚙️ Training Configuration
 
 Optimizer: Adam
 
@@ -104,11 +104,11 @@ Validation Accuracy: ~93–94%
 
 The small gap between training and validation accuracy indicates good generalization with minimal overfitting.
 
-🌐 Web Application (Flask Deployment)
+## 🌐 Web Application (Flask Deployment)
 
 The trained model is deployed using Flask.
 
-✨ Features
+## ✨ Features
 
 Upload microscopic blood cell image
 
@@ -128,7 +128,7 @@ Professional dark-themed UI
 
 Medical disclaimer included
 
-🔄 Application Workflow
+## 🔄 Application Workflow
 
 User uploads a blood smear image
 
@@ -138,7 +138,7 @@ Model performs binary classification
 
 Prediction probabilities are calculated
 
-Result page displays:
+## Result page displays:
 
 Prediction
 
@@ -152,7 +152,7 @@ Uploaded image preview
 
 Model name
 
-📁 Project Structure
+## 📁 Project Structure
 MalariaProject/
 │
 ├── app.py
@@ -167,19 +167,19 @@ MalariaProject/
 │
 └── static/
     └── uploads/
-🛠 Installation & Setup
-1️⃣ Create Environment
+## 🛠 Installation & Setup
+**1️⃣ Create Environment**
 conda create -n malaria python=3.10
 conda activate malaria
-2️⃣ Install Dependencies
+**2️⃣ Install Dependencies**
 pip install -r requirements.txt
-3️⃣ Run Application
+**3️⃣ Run Application**
 python app.py
 
 Open in browser:
 
-http://127.0.0.1:5000
-📊 Results
+**http://127.0.0.1:5000**
+## 📊 Results
 
 Validation Accuracy: ~93–94%
 
@@ -191,7 +191,7 @@ Classification report generated
 
 The model demonstrates strong performance with minimal overfitting.
 
-⚠️ Limitations
+## ⚠️ Limitations
 
 Not a clinical diagnostic tool
 
@@ -201,21 +201,7 @@ Binary classification only
 
 EfficientNet performance limited due to reduced input resolution
 
-🚀 Future Improvements
+## 📜 Disclaimer
 
-Grad-CAM visualization for explainability
-
-Multi-class parasite classification
-
-Batch image prediction
-
-Cloud deployment
-
-Larger dataset training
-
-Input size upgrade (224×224)
-
-📜 Disclaimer
-
-This project is developed for academic and educational purposes only.
-It is not intended for real-world clinical or medical diagnosis.
+**This project is developed for academic and educational purposes only.
+It is not intended for real-world clinical or medical diagnosis.**
