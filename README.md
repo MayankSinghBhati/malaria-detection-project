@@ -1,5 +1,5 @@
-#🧬 Malaria Detection using Deep Learning
-##📌 Overview
+🧬 Malaria Detection using Deep Learning
+📌 Overview
 
 This project implements a Deep Learning-based system to detect malaria infection from microscopic blood smear images.
 
@@ -11,7 +11,7 @@ Uninfected
 
 Multiple architectures were trained and compared. The final deployed model uses MobileNetV2 (Fine-Tuned Transfer Learning) and is integrated into a Flask web application for real-time prediction.
 
-##🎯 Problem Statement
+🎯 Problem Statement
 
 Traditional malaria diagnosis relies on manual microscopic examination of blood smear images. This process:
 
@@ -25,7 +25,7 @@ May be prone to human error
 
 This project demonstrates how Deep Learning can assist in automating malaria detection and supporting faster preliminary screening.
 
-##📂 Dataset
+📂 Dataset
 
 Dataset: NIH Malaria Cell Images
 
