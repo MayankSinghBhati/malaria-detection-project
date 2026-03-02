@@ -1,106 +1,160 @@
-# Malaria Detection using Deep Learning (CNN)
+🧬 Malaria Detection Using Deep Learning
 
-## Overview
+An AI-powered web application that detects malaria parasites in microscopic blood cell images using Deep Learning and Transfer Learning.
 
-This project implements a Convolutional Neural Network (CNN) to detect malaria infection from microscopic blood cell images.
+This project compares multiple CNN architectures and deploys the best-performing model using Flask.
 
-The model classifies images into two categories:
-- Parasitized
-- Uninfected
+🚀 Project Overview
 
-The system is built using TensorFlow and deployed using Streamlit for real-time prediction.
+Malaria is a life-threatening disease caused by Plasmodium parasites transmitted through mosquito bites. Early detection through microscopic blood smear analysis is critical.
 
-## Problem Statement
+This project builds an automated malaria detection system using:
 
-Traditional malaria diagnosis relies on microscopic examination of blood smear images. This process:
+Custom Convolutional Neural Network (CNN)
 
-- Requires skilled pathologists
-- Is time-consuming
-- Can be inaccessible in remote areas
+MobileNetV2 (Transfer Learning)
 
-This project demonstrates how deep learning can assist in automating malaria detection from blood smear images.
+EfficientNetB0 (Transfer Learning)
 
-## Dataset
+The final deployed model uses MobileNetV2 (Fine-Tuned) for optimal performance and generalization.
 
-- Dataset: NIH Malaria Cell Images
-- Total Images: ~27,000
-- Classes: 2 (Parasitized, Uninfected)
-- Train-Validation Split: 80% Training, 20% Validation
-- Image Size Used: 96 × 96
+🧠 Model Comparison
 
-## Model Architecture
+Three architectures were trained and evaluated on the same dataset:
 
-The CNN model consists of:
+Model	Validation Accuracy
+Custom CNN	~94%
+MobileNetV2	~93%
+EfficientNetB0	~50% (underperformed at 96×96 resolution)
+Why MobileNetV2?
 
-- Convolution Layers (feature extraction)
-- ReLU Activation Function
-- MaxPooling Layers
-- Flatten Layer
-- Dense Fully Connected Layer
-- Sigmoid Output Layer (binary classification)
+Although Custom CNN achieved slightly higher accuracy, MobileNetV2 was selected because:
 
-### Training Configuration
+Uses pretrained ImageNet weights
 
-- Optimizer: Adam
-- Loss Function: Binary Crossentropy
-- Epochs: 10
-- Validation Accuracy: ~93%
-- Training Accuracy: ~98%
+Better generalization capability
 
-## Results
+More scalable architecture
 
-- Validation Accuracy: ~93%
-- Overall Evaluation Accuracy: ~97%
-- Confusion Matrix and Classification Report generated
+Transfer learning advantage
 
-The small difference between training and validation accuracy indicates good generalization with minimal overfitting.
+📊 Dataset
 
-## Streamlit Application
+Microscopic blood smear cell images
 
-The trained model is integrated into a Streamlit web application that allows users to:
+Two classes:
 
-- Upload a microscopic blood cell image
-- Receive classification results
-- View confidence scores for both classes
+Parasitized
 
-## Project Structure
+Uninfected
 
-MalariaProject/
-- app.py
-- train.py
-- evaluate.py
-- malaria_model.h5
-- requirements.txt
-- documentation/
+Images resized to 96×96
 
-## Installation & Setup
+Pixel values normalized to [0, 1]
 
-1. Install Anaconda.
+🛠 Tech Stack
 
-2. Create and activate environment:
+Python
 
-conda create -n malaria python=3.10  
-conda activate malaria  
+TensorFlow / Keras
 
-3. Install dependencies:
+MobileNetV2 (Transfer Learning)
 
-pip install -r requirements.txt  
+Flask
 
-4. Run the application:
+HTML / CSS
 
-streamlit run app.py  
+NumPy
 
-Optional (Light Mode):
+PIL
 
-streamlit run app.py --theme.base="light"
+🌐 Web Application Features
 
-## Limitations
+Upload microscopic blood cell image
 
-- Not a clinical diagnostic tool
-- Performance depends on image quality
-- Misclassification rate approximately 7%
-- Binary classification only
+Live image preview before prediction
 
-## Disclaimer
+AI-based classification
 
-This project is developed for academic purposes only and is not intended for real-world medical diagnosis.
+Confidence percentage
+
+Class probability breakdown
+
+Processing time display
+
+Uploaded image preview in report
+
+Clean dark-themed UI
+
+Medical disclaimer included
+
+🖥 Application Workflow
+
+User uploads image.
+
+Image is resized and normalized.
+
+Model performs prediction.
+
+Probabilities are computed.
+
+Result page displays:
+
+Prediction
+
+Confidence level
+
+Probability breakdown
+
+Processing time
+
+Uploaded image preview
+
+📁 Project Structure
+Malaria-Detection/
+│
+├── app.py
+├── best_model.keras
+├── train.py
+├── model_comparison.py
+│
+├── templates/
+│   ├── index.html
+│   └── result.html
+│
+└── static/
+    └── uploads/
+⚙️ How To Run Locally
+1️⃣ Clone the Repository
+git clone https://github.com/yourusername/malaria-detection.git
+cd malaria-detection
+2️⃣ Install Dependencies
+pip install -r requirements.txt
+3️⃣ Run Application
+python app.py
+
+Open in browser:
+
+http://127.0.0.1:5000
+⚠️ Disclaimer
+
+This AI system is developed for educational purposes only.
+It is not intended for clinical or medical diagnosis.
+
+📌 Future Improvements
+
+Grad-CAM visualization for explainability
+
+Batch image prediction
+
+Drag-and-drop upload enhancement
+
+Model performance dashboard
+
+Deployment to cloud (Heroku / Render / AWS)
+
+👨‍💻 Author
+
+Developed as part of a Deep Learning project.
+
+If you found this project useful, feel free to ⭐ the repository.
