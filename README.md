@@ -1,102 +1,142 @@
-🧬 Malaria Detection Using Deep Learning
+🧬 Malaria Detection using Deep Learning
+📌 Overview
 
-An AI-powered web application that detects malaria parasites in microscopic blood cell images using Deep Learning and Transfer Learning.
+This project implements a Deep Learning-based system to detect malaria infection from microscopic blood smear images.
 
-This project compares multiple CNN architectures and deploys the best-performing model using Flask.
-
-🚀 Project Overview
-
-Malaria is a life-threatening disease caused by Plasmodium parasites transmitted through mosquito bites. Early detection through microscopic blood smear analysis is critical.
-
-This project builds an automated malaria detection system using:
-
-Custom Convolutional Neural Network (CNN)
-
-MobileNetV2 (Transfer Learning)
-
-EfficientNetB0 (Transfer Learning)
-
-The final deployed model uses MobileNetV2 (Fine-Tuned) for optimal performance and generalization.
-
-🧠 Model Comparison
-
-Three architectures were trained and evaluated on the same dataset:
-
-Model	Validation Accuracy
-Custom CNN	~94%
-MobileNetV2	~93%
-EfficientNetB0	~50% (underperformed at 96×96 resolution)
-Why MobileNetV2?
-
-Although Custom CNN achieved slightly higher accuracy, MobileNetV2 was selected because:
-
-Uses pretrained ImageNet weights
-
-Better generalization capability
-
-More scalable architecture
-
-Transfer learning advantage
-
-📊 Dataset
-
-Microscopic blood smear cell images
-
-Two classes:
+The model classifies images into two categories:
 
 Parasitized
 
 Uninfected
 
+Multiple architectures were trained and compared. The final deployed model uses MobileNetV2 (Fine-Tuned Transfer Learning) and is integrated into a Flask web application for real-time prediction.
+
+🎯 Problem Statement
+
+Traditional malaria diagnosis relies on manual microscopic examination of blood smear images. This process:
+
+Requires trained medical experts
+
+Is time-consuming
+
+Can be inaccessible in remote areas
+
+May be prone to human error
+
+This project demonstrates how Deep Learning can assist in automating malaria detection and supporting faster preliminary screening.
+
+📂 Dataset
+
+Dataset: NIH Malaria Cell Images
+
+Total Images: ~27,000
+
+Classes: 2 (Parasitized, Uninfected)
+
+Train–Validation Split: 80% Training, 20% Validation
+
+Image Size Used: 96 × 96 pixels
+
+🔹 Preprocessing
+
 Images resized to 96×96
 
-Pixel values normalized to [0, 1]
+Pixel values normalized to range [0, 1]
 
-🛠 Tech Stack
+🧠 Model Development
 
-Python
+Three different models were trained and evaluated:
 
-TensorFlow / Keras
+1️⃣ Custom CNN
 
-MobileNetV2 (Transfer Learning)
+Validation Accuracy: ~94%
 
-Flask
+Architecture:
 
-HTML / CSS
+Convolution Layers
 
-NumPy
+ReLU Activation
 
-PIL
+MaxPooling
 
-🌐 Web Application Features
+Flatten
+
+Dense Layers
+
+Sigmoid Output
+
+2️⃣ MobileNetV2 (Transfer Learning – Selected Model)
+
+Validation Accuracy: ~93%
+
+Why selected?
+
+Pretrained on ImageNet
+
+Better generalization
+
+Fine-tuned final layers
+
+Scalable architecture
+
+3️⃣ EfficientNetB0
+
+Validation Accuracy: ~50%
+
+Underperformed at 96×96 resolution and was not selected for deployment.
+
+⚙️ Training Configuration
+
+Optimizer: Adam
+
+Loss Function: Binary Crossentropy
+
+Epochs: 10
+
+EarlyStopping used
+
+ReduceLROnPlateau used
+
+ModelCheckpoint used
+
+Training Accuracy: ~98%
+Validation Accuracy: ~93–94%
+
+The small gap between training and validation accuracy indicates good generalization with minimal overfitting.
+
+🌐 Web Application (Flask Deployment)
+
+The trained model is deployed using Flask.
+
+✨ Features
 
 Upload microscopic blood cell image
 
-Live image preview before prediction
+Live image preview before analysis
 
-AI-based classification
+Real-time prediction
 
-Confidence percentage
+Confidence score display
 
 Class probability breakdown
 
-Processing time display
+Processing time measurement
 
 Uploaded image preview in report
 
-Clean dark-themed UI
+Professional dark-themed UI
 
 Medical disclaimer included
 
-🖥 Application Workflow
+🔄 Application Workflow
 
-User uploads image.
+User uploads a blood smear image
 
-Image is resized and normalized.
+Image is resized and normalized
 
-Model performs prediction.
+Model performs binary classification
 
-Probabilities are computed.
+Prediction probabilities are calculated
 
 Result page displays:
 
@@ -104,19 +144,22 @@ Prediction
 
 Confidence level
 
-Probability breakdown
+Class probabilities
 
 Processing time
 
 Uploaded image preview
 
+Model name
+
 📁 Project Structure
-Malaria-Detection/
+MalariaProject/
 │
 ├── app.py
-├── best_model.keras
 ├── train.py
 ├── model_comparison.py
+├── best_model.keras
+├── requirements.txt
 │
 ├── templates/
 │   ├── index.html
@@ -124,10 +167,10 @@ Malaria-Detection/
 │
 └── static/
     └── uploads/
-⚙️ How To Run Locally
-1️⃣ Clone the Repository
-git clone https://github.com/yourusername/malaria-detection.git
-cd malaria-detection
+🛠 Installation & Setup
+1️⃣ Create Environment
+conda create -n malaria python=3.10
+conda activate malaria
 2️⃣ Install Dependencies
 pip install -r requirements.txt
 3️⃣ Run Application
@@ -136,25 +179,43 @@ python app.py
 Open in browser:
 
 http://127.0.0.1:5000
-⚠️ Disclaimer
+📊 Results
 
-This AI system is developed for educational purposes only.
-It is not intended for clinical or medical diagnosis.
+Validation Accuracy: ~93–94%
 
-📌 Future Improvements
+Training Accuracy: ~98%
+
+Confusion Matrix generated
+
+Classification report generated
+
+The model demonstrates strong performance with minimal overfitting.
+
+⚠️ Limitations
+
+Not a clinical diagnostic tool
+
+Performance depends on image quality
+
+Binary classification only
+
+EfficientNet performance limited due to reduced input resolution
+
+🚀 Future Improvements
 
 Grad-CAM visualization for explainability
 
+Multi-class parasite classification
+
 Batch image prediction
 
-Drag-and-drop upload enhancement
+Cloud deployment
 
-Model performance dashboard
+Larger dataset training
 
-Deployment to cloud (Heroku / Render / AWS)
+Input size upgrade (224×224)
 
-👨‍💻 Author
+📜 Disclaimer
 
-Developed as part of a Deep Learning project.
-
-If you found this project useful, feel free to ⭐ the repository.
+This project is developed for academic and educational purposes only.
+It is not intended for real-world clinical or medical diagnosis.
