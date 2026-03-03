@@ -1,132 +1,148 @@
-# 🧬 Malaria Detection using Deep Learning
+# 🧬 Malaria Detection using Deep Learning (CNN + Transfer Learning)
 ## 📌 Overview
 
-This project implements a Deep Learning-based system to detect malaria infection from microscopic blood smear images.
+This project implements a deep learning system for detecting malaria infection from microscopic blood smear images.
 
-The model classifies images into two categories:
+The system performs binary classification:
 
 Parasitized
 
 Uninfected
 
-Multiple architectures were trained and compared. The final deployed model uses MobileNetV2 (Fine-Tuned Transfer Learning) and is integrated into a Flask web application for real-time prediction.
+Multiple CNN architectures were trained, evaluated, and compared.
+
+Two architectures were developed:
+
+CustomCNN (Lightweight) – Used for demonstration and lightweight deployment
+
+MobileNetV2 (Transfer Learning) – Final production architecture aligned with milestone requirements
+
+The final production architecture follows the milestone flow using MobileNetV2 with fine-tuning.
 
 ## 🎯 Problem Statement
 
-Traditional malaria diagnosis relies on manual microscopic examination of blood smear images. This process:
+Manual malaria diagnosis:
 
-Requires trained medical experts
+Requires trained experts
 
 Is time-consuming
 
 Can be inaccessible in remote areas
 
-May be prone to human error
+Is prone to human error
 
-This project demonstrates how Deep Learning can assist in automating malaria detection and supporting faster preliminary screening.
+This project demonstrates how Convolutional Neural Networks (CNNs) can assist in automated malaria screening.
 
 ## 📂 Dataset
 
 Dataset: NIH Malaria Cell Images
-
 Total Images: ~27,000
-
 Classes: 2 (Parasitized, Uninfected)
-
 Train–Validation Split: 80% Training, 20% Validation
+Image Resolution Used: 96 × 96 pixels
 
-Image Size Used: 96 × 96 pixels
-
-## 🔹 Preprocessing
+**🔹 Data Preprocessing**
 
 Images resized to 96×96
 
-Pixel values normalized to range [0, 1]
+Pixel normalization to range [0,1]
+
+Train–Validation split (80–20)
+
+Data generators used for efficient training
 
 ## 🧠 Model Development
-
-Three different models were trained and evaluated:
-
-**1️⃣ Custom CNN**
+**1️⃣ CustomCNN (Lightweight Deployment Model)**
 
 Validation Accuracy: ~94%
 
-Architecture:
+Purpose:
 
-Convolution Layers
+Lightweight deployment
 
-ReLU Activation
+Faster inference
 
-MaxPooling
+Demonstration model for web interface
 
-Flatten
-
-Dense Layers
-
-Sigmoid Output
-
-**2️⃣ MobileNetV2 (Transfer Learning – Selected Model)**
+**2️⃣ MobileNetV2 (Transfer Learning – Milestone Architecture)**
 
 Validation Accuracy: ~93%
 
-Why selected?
+Configuration:
 
 Pretrained on ImageNet
 
-Better generalization
+include_top=False
 
 Fine-tuned final layers
 
-Scalable architecture
+GlobalAveragePooling
 
-**3️⃣ EfficientNetB0**
-
-Validation Accuracy: ~50%
-
-Underperformed at 96×96 resolution and was not selected for deployment.
+Dense classification head
 
 ## ⚙️ Training Configuration
 
+Framework: TensorFlow 2.13.0
+Keras Version: 2.13.x
+Python Version: 3.10
+
 Optimizer: Adam
-
 Loss Function: Binary Crossentropy
-
 Epochs: 10
+Callbacks Used:
 
-EarlyStopping used
+EarlyStopping
 
-ReduceLROnPlateau used
+ReduceLROnPlateau
 
-ModelCheckpoint used
+ModelCheckpoint
 
 Training Accuracy: ~98%
 Validation Accuracy: ~93–94%
 
-The small gap between training and validation accuracy indicates good generalization with minimal overfitting.
+Minimal overfitting observed.
 
-## 🌐 Web Application (Flask Deployment)
+## 🌐 Deployment
 
-The trained model is deployed using Flask.
+The application is deployed using:
+
+HuggingFace Spaces
+
+Gradio UI
+
+TensorFlow 2.13 runtime
+
+**🔹 Demo Model**
+
+CustomCNN is used in lightweight demo environments for faster inference.
+
+**🔹 Production Architecture**
+
+MobileNetV2 (Transfer Learning) represents the final milestone-compliant architecture.
+
+This distinction ensures:
+
+Milestone alignment
+
+Demonstration efficiency
+
+Architectural clarity
 
 ## ✨ Features
 
 Upload microscopic blood cell image
 
-Live image preview before analysis
-
 Real-time prediction
 
 Confidence score display
 
-Class probability breakdown
-
 Processing time measurement
 
-Uploaded image preview in report
+Professional medical-style UI
 
-Professional dark-themed UI
+Model variant transparency
 
-Medical disclaimer included
+Academic disclaimer
 
 ## 🔄 Application Workflow
 
@@ -134,74 +150,45 @@ User uploads a blood smear image
 
 Image is resized and normalized
 
-Model performs binary classification
+CNN performs binary classification
 
-Prediction probabilities are calculated
+Prediction probability calculated
 
-## Result page displays:
-
-Prediction
-
-Confidence level
-
-Class probabilities
-
-Processing time
-
-Uploaded image preview
-
-Model name
+Results displayed with confidence and processing time
 
 ## 📁 Project Structure
-MalariaProject/
+Malaria_Detection_Project/
 │
+├── static
+├── templates
 ├── app.py
 ├── train.py
 ├── model_comparison.py
-├── best_model.keras
+├── visualize_data.py
+├── evaluate.py
+├── best_model.h5
+├── malaria_model.h5
 ├── requirements.txt
-│
-├── templates/
-│   ├── index.html
-│   └── result.html
-│
-└── static/
-    └── uploads/
-## 🛠 Installation & Setup
-**1️⃣ Create Environment**
-conda create -n malaria python=3.10
-conda activate malaria
-**2️⃣ Install Dependencies**
-pip install -r requirements.txt
-**3️⃣ Run Application**
-python app.py
+├── runtime.txt
+└── README.md
+## 📊 Model Comparison Summary
+Model	Validation Accuracy	Use Case
+CustomCNN	~94%	Demo / Lightweight
+MobileNetV2	~93%	Production / Milestone
 
-Open in browser:
-
-**http://127.0.0.1:5000**
-## 📊 Results
-
-Validation Accuracy: ~93–94%
-
-Training Accuracy: ~98%
-
-Confusion Matrix generated
-
-Classification report generated
-
-The model demonstrates strong performance with minimal overfitting.
+Both models demonstrate strong performance with minimal overfitting.
 
 ## ⚠️ Limitations
 
 Not a clinical diagnostic tool
 
-Performance depends on image quality
+Dependent on image quality
 
 Binary classification only
 
-EfficientNet performance limited due to reduced input resolution
+Resolution constrained to 96×96
 
 ## 📜 Disclaimer
 
-**This project is developed for academic and educational purposes only.
-It is not intended for real-world clinical or medical diagnosis.**
+**This project is developed strictly for academic and educational purposes.**
+**It is not intended for medical diagnosis or clinical use.**
