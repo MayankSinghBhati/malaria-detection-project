@@ -1,10 +1,9 @@
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras import layers, models
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
 
-print("RUNNING UPDATED TRAIN FILE")
+print("TRAINING LIGHTWEIGHT CNN MODEL")
 
 IMG_SIZE = 96
 BATCH_SIZE = 32
@@ -31,19 +30,19 @@ val = datagen.flow_from_directory(
     subset='validation'
 )
 
-# Load Pretrained MobileNetV2
-base_model = MobileNetV2(
-    input_shape=(IMG_SIZE, IMG_SIZE, 3),
-    include_top=False,
-    weights='imagenet'
-)
-
-base_model.trainable = False
-
-# Create model
+# 🔥 Lightweight Custom CNN
 model = models.Sequential([
-    base_model,
-    layers.GlobalAveragePooling2D(),
+    layers.Conv2D(32, (3,3), activation='relu', input_shape=(96,96,3)),
+    layers.MaxPooling2D(2,2),
+
+    layers.Conv2D(64, (3,3), activation='relu'),
+    layers.MaxPooling2D(2,2),
+
+    layers.Conv2D(128, (3,3), activation='relu'),
+    layers.MaxPooling2D(2,2),
+
+    layers.Flatten(),
+    layers.Dense(128, activation='relu'),
     layers.Dropout(0.5),
     layers.Dense(1, activation='sigmoid')
 ])
@@ -68,35 +67,15 @@ reduce_lr = ReduceLROnPlateau(
 )
 
 checkpoint = ModelCheckpoint(
-    "best_model.h5",          # CHANGED TO H5
+    "best_model.h5",
     monitor='val_accuracy',
     save_best_only=True,
-    save_format="h5"          # FORCE H5 FORMAT
+    save_format="h5"
 )
 
-# Initial Training
 history = model.fit(
     train,
     epochs=10,
-    validation_data=val,
-    callbacks=[early_stop, reduce_lr, checkpoint]
-)
-
-# Fine-tuning
-base_model.trainable = True
-
-for layer in base_model.layers[:-20]:
-    layer.trainable = False
-
-model.compile(
-    optimizer=tf.keras.optimizers.Adam(1e-5),
-    loss='binary_crossentropy',
-    metrics=['accuracy']
-)
-
-history_fine = model.fit(
-    train,
-    epochs=5,
     validation_data=val,
     callbacks=[early_stop, reduce_lr, checkpoint]
 )
