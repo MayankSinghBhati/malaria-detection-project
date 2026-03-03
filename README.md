@@ -41,6 +41,8 @@ Classes: 2 (Parasitized, Uninfected)
 Train–Validation Split: 80% Training, 20% Validation
 Image Resolution Used: 96 × 96 pixels
 
+https://www.kaggle.com/datasets/iarunava/cell-images-for-detecting-malaria
+
 **🔹 Data Preprocessing**
 
 Images resized to 96×96
@@ -102,6 +104,45 @@ Validation Accuracy: ~93–94%
 
 Minimal overfitting observed.
 
+## 🚀 How to Run the Project Locally
+**1️⃣ Clone the Repository**
+*git clone https://github.com/your-username/Malaria_Detection_Project.git*
+*cd Malaria_Detection_Project*
+
+**2️⃣ Create Python Environment (Required)**
+
+Models were trained in Python 3.10 + TensorFlow 2.13, so use the same.
+
+In Anaconda Prompt - 
+*conda create -n malaria python=3.10*
+*conda activate malaria*
+
+**3️⃣ Install Dependencies**
+*pip install -r requirements.txt*
+
+If installing manually:
+
+*pip install tensorflow==2.13.0 keras==2.13.1 numpy==1.24.3 pillow gradio==4.26.0*
+
+**4️⃣ Ensure Model File Exists**
+
+Make sure one of the following is present in the project root:
+
+mobilenet_model.h5
+
+(or)
+
+custom_model.h5
+
+**5️⃣ Run the Application**
+python app.py
+
+You will see output similar to:
+
+Running on local URL: http://127.0.0.1:7860
+
+Open that link in your browser.
+
 ## 🌐 Deployment
 
 The application is deployed using:
@@ -159,6 +200,7 @@ Results displayed with confidence and processing time
 ## 📁 Project Structure
 Malaria_Detection_Project/
 │
+├── cell_images
 ├── static
 ├── templates
 ├── app.py
