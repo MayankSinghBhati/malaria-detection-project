@@ -1,35 +1,59 @@
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.metrics import confusion_matrix, classification_report, roc_curve, auc
+import matplotlib.pyplot as plt
 import numpy as np
 
 IMG_SIZE = 96
+BATCH_SIZE = 32
+DATASET_PATH = "cell_images"
 
-# Load trained model
-model = tf.keras.models.load_model("malaria_model.h5")
-
-# Use same validation split as training
+# Load validation data
 datagen = ImageDataGenerator(
     rescale=1./255,
     validation_split=0.2
 )
 
-val = datagen.flow_from_directory(
-    "cell_images",
+val_generator = datagen.flow_from_directory(
+    DATASET_PATH,
     target_size=(IMG_SIZE, IMG_SIZE),
-    batch_size=32,
+    batch_size=BATCH_SIZE,
     class_mode='binary',
     subset='validation',
     shuffle=False
 )
 
-# Predict
-predictions = model.predict(val)
+true_labels = val_generator.classes
+
+# Load BEST CustomCNN model
+model = tf.keras.models.load_model("best_model.h5")
+
+# Predict probabilities
+predictions = model.predict(val_generator)
 predicted_classes = (predictions > 0.5).astype(int).reshape(-1)
 
-# Results
-print("Confusion Matrix:")
-print(confusion_matrix(val.classes, predicted_classes))
+print("\n========== CustomCNN Evaluation ==========")
+
+print("\nConfusion Matrix:")
+print(confusion_matrix(true_labels, predicted_classes))
 
 print("\nClassification Report:")
-print(classification_report(val.classes, predicted_classes))
+print(classification_report(true_labels, predicted_classes))
+
+# ROC Curve
+fpr, tpr, thresholds = roc_curve(true_labels, predictions)
+roc_auc = auc(fpr, tpr)
+
+print(f"\nROC-AUC Score: {roc_auc:.4f}")
+
+plt.figure()
+plt.plot(fpr, tpr, label=f'CustomCNN (AUC = {roc_auc:.4f})')
+plt.plot([0, 1], [0, 1], linestyle='--')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC Curve - CustomCNN')
+plt.legend(loc="lower right")
+plt.grid()
+
+plt.savefig("CustomCNN_ROC.png")
+plt.show()
