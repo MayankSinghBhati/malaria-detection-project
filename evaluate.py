@@ -6,7 +6,7 @@ import numpy as np
 IMG_SIZE = 96
 
 # Load trained model
-model = tf.keras.models.load_model("malaria_model.keras")
+model = tf.keras.models.load_model("malaria_model.h5")
 
 # Use same validation split as training
 datagen = ImageDataGenerator(

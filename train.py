@@ -3,7 +3,8 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras import layers, models
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
-import matplotlib.pyplot as plt
+
+print("RUNNING UPDATED TRAIN FILE")
 
 IMG_SIZE = 96
 BATCH_SIZE = 32
@@ -67,9 +68,10 @@ reduce_lr = ReduceLROnPlateau(
 )
 
 checkpoint = ModelCheckpoint(
-    "best_model.keras",
+    "best_model.h5",          # CHANGED TO H5
     monitor='val_accuracy',
-    save_best_only=True
+    save_best_only=True,
+    save_format="h5"          # FORCE H5 FORMAT
 )
 
 # Initial Training
@@ -99,6 +101,7 @@ history_fine = model.fit(
     callbacks=[early_stop, reduce_lr, checkpoint]
 )
 
-model.save("malaria_model.keras")
+# Final Save (H5 ONLY)
+model.save("malaria_model.h5", save_format="h5")
 
 print("Training Complete.")

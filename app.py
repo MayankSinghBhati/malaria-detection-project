@@ -32,7 +32,7 @@ if MODEL_ERROR is None:
     current_dir = os.getcwd()
 
     try:
-        model_files = [f for f in os.listdir(current_dir) if f.endswith('.keras')]
+        model_files = [f for f in os.listdir(current_dir) if f.endswith('.h5')]
 
         if model_files:
             MODEL_PATH = os.path.join(current_dir, model_files[0])
@@ -151,7 +151,7 @@ def predict():
             uninfected_prob = prob * 100
 
         model_name = os.path.basename(MODEL_PATH) if MODEL_PATH else "Loaded Model"
-        model_name = model_name.replace('.keras', '')
+        model_name = model_name.replace('.h5', '')
 
         return render_template(
             'result.html',
