@@ -41,6 +41,8 @@ Classes: 2 (Parasitized, Uninfected)
 Train–Validation Split: 80% Training, 20% Validation
 Image Resolution Used: 96 × 96 pixels
 
+https://www.kaggle.com/datasets/iarunava/cell-images-for-detecting-malaria
+
 **🔹 Data Preprocessing**
 
 Images resized to 96×96
