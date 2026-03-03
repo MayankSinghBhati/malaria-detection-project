@@ -119,7 +119,7 @@
 
         <h2>
             {% if prediction == 'Parasitized' %}
-                ❗ PARASITIZED
+                ❗PARASITIZED
             {% else %}
                 ✅ UNINFECTED
             {% endif %}
@@ -158,11 +158,10 @@
         <p>Uninfected Probability: {{ uninfected_prob }}%</p>
         <p>Processing Time: {{ processing_time }}s</p>
         <p>Timestamp: {{ timestamp }}</p>
-        <p>Model Used: MobileNetV2 (Fine-Tuned)</p>
+        <p>Model Used: Custom CNN (Binary Classification)</p>
     </div>
 
     <a href="/" class="btn">🔍 Analyze Another Sample</a>
-
 </div>
 
 </body>
