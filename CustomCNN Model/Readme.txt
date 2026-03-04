@@ -1,4 +1,4 @@
-IMPORTANT - BEFORE RUN , PUT cell_images DATASET IN FOLDER
+IMPORTANT - BEFORE RUN , PUT cell_images DATASET IN FOLDER FOR **TRAINING FILES**
 
 
 best_model.h5 is the model created after seeing best of all the epochs

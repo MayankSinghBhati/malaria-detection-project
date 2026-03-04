@@ -5,6 +5,7 @@ from tensorflow.keras.applications import MobileNetV2, EfficientNetB0
 from tensorflow.keras.callbacks import EarlyStopping
 import matplotlib.pyplot as plt
 import pandas as pd
+import os
 
 IMG_SIZE = 96
 BATCH_SIZE = 32
@@ -17,7 +18,7 @@ datagen = ImageDataGenerator(
 )
 
 train_gen = datagen.flow_from_directory(
-    "cell_images",
+    "../cell_images",
     target_size=(IMG_SIZE, IMG_SIZE),
     batch_size=BATCH_SIZE,
     class_mode='binary',
@@ -25,7 +26,7 @@ train_gen = datagen.flow_from_directory(
 )
 
 val_gen = datagen.flow_from_directory(
-    "cell_images",
+    "../cell_images",
     target_size=(IMG_SIZE, IMG_SIZE),
     batch_size=BATCH_SIZE,
     class_mode='binary',
@@ -38,6 +39,9 @@ early_stop = EarlyStopping(
     restore_best_weights=True
 )
 
+# Create documentation folder if it doesn't exist
+os.makedirs("../documentation", exist_ok=True)
+
 def plot_history(history, model_name):
     # Accuracy
     plt.figure()
@@ -45,7 +49,7 @@ def plot_history(history, model_name):
     plt.plot(history.history['val_accuracy'], label='Val Accuracy')
     plt.title(f"{model_name} - Accuracy")
     plt.legend()
-    plt.savefig(f"{model_name}_accuracy.png")
+    plt.savefig(f"../documentation/{model_name}_accuracy.png")
     plt.close()
 
     # Loss
@@ -54,7 +58,7 @@ def plot_history(history, model_name):
     plt.plot(history.history['val_loss'], label='Val Loss')
     plt.title(f"{model_name} - Loss")
     plt.legend()
-    plt.savefig(f"{model_name}_loss.png")
+    plt.savefig(f"../documentation/{model_name}_loss.png")
     plt.close()
 
 results = {}

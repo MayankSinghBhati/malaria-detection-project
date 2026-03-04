@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import cv2
 import random
 
-DATASET_PATH = "cell_images"
+DATASET_PATH = "../cell_images"
 
 parasitized_path = os.path.join(DATASET_PATH, "Parasitized")
 uninfected_path = os.path.join(DATASET_PATH, "Uninfected")

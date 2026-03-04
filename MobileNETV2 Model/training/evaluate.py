@@ -3,6 +3,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from sklearn.metrics import confusion_matrix, classification_report, roc_curve, auc
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
 IMG_SIZE = 96
 BATCH_SIZE = 32
@@ -25,14 +26,14 @@ val_generator = datagen.flow_from_directory(
 
 true_labels = val_generator.classes
 
-# Load BEST CustomCNN model
+# Load BEST MobileNetV2 model
 model = tf.keras.models.load_model("best_model.h5")
 
 # Predict probabilities
 predictions = model.predict(val_generator)
 predicted_classes = (predictions > 0.5).astype(int).reshape(-1)
 
-print("\n========== CustomCNN Evaluation ==========")
+print("\n========== MobileNetV2 Evaluation ==========")
 
 print("\nConfusion Matrix:")
 print(confusion_matrix(true_labels, predicted_classes))
@@ -47,13 +48,15 @@ roc_auc = auc(fpr, tpr)
 print(f"\nROC-AUC Score: {roc_auc:.4f}")
 
 plt.figure()
-plt.plot(fpr, tpr, label=f'CustomCNN (AUC = {roc_auc:.4f})')
+plt.plot(fpr, tpr, label=f'MobileNetV2 (AUC = {roc_auc:.4f})')
 plt.plot([0, 1], [0, 1], linestyle='--')
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
-plt.title('ROC Curve - CustomCNN')
+plt.title('ROC Curve - MobileNetV2')
 plt.legend(loc="lower right")
 plt.grid()
 
-plt.savefig("CustomCNN_ROC.png")
+os.makedirs("../documentation", exist_ok=True)
+
+plt.savefig("../documentation/MobileNetV2_ROC.png")
 plt.show()

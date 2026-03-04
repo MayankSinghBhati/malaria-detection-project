@@ -87,6 +87,12 @@ Dense classification head
 | MobileNetV2 | 93.5%          | 0.04 sec           |
 | CustomCNN   | 95.5%          | 0.035 sec          |
 
+## 📊 Model Comparison Summary
+Model	Validation Accuracy	Use Case
+CustomCNN	~94%	Demo / Lightweight
+MobileNetV2	~93%	Production / Milestone
+
+Both models demonstrate strong performance with minimal overfitting.
 
 ## ⚙️ Training Configuration
 
@@ -165,26 +171,45 @@ Prediction probability calculated
 Results displayed with confidence and processing time
 
 ## 📁 Project Structure
+```
 Malaria_Detection_Project/
 │
-├── static
-├── templates
+├── cell_images/
+│   ├── Parasitized/
+│   └── Uninfected/
+│
+├── documentation/
+│   ├── CustomCNN_accuracy.png
+│   ├── CustomCNN_loss.png
+│   ├── CustomCNN_ROC.png
+│   ├── EfficientNetB0_accuracy.png
+│   ├── EfficientNetB0_loss.png
+│   ├── MobileNetV2_accuracy.png
+│   └── MobileNetV2_loss.png
+│
+├── static/
+│   ├── uploads/
+│   └── style.css
+│
+├── templates/
+│   ├── index.html
+│   └── result.html
+│
+├── training/
+│   ├── train.py
+│   ├── evaluate.py
+│   ├── model_comparison.py
+│   └── visualize_data.py
+│
 ├── app.py
-├── train.py
-├── model_comparison.py
-├── visualize_data.py
-├── evaluate.py
 ├── best_model.h5
 ├── malaria_model.h5
+├── real_world_test.py
 ├── requirements.txt
-├── runtime.txt
+├── Procfile
+├── .python-version
 └── README.md
-## 📊 Model Comparison Summary
-Model	Validation Accuracy	Use Case
-CustomCNN	~94%	Demo / Lightweight
-MobileNetV2	~93%	Production / Milestone
-
-Both models demonstrate strong performance with minimal overfitting.
+```
 
 ## ⚠️ Limitations
 
