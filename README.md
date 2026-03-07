@@ -199,7 +199,7 @@ Malaria_Detection_Project/
 │   ├── train.py
 │   ├── evaluate.py
 │   ├── model_comparison.py
-│   └── visualize_data.py
+│   └── visualize_data.py 
 │
 ├── app.py
 ├── best_model.h5

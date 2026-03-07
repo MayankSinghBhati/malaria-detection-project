@@ -39,7 +39,6 @@ early_stop = EarlyStopping(
     restore_best_weights=True
 )
 
-# Create documentation folder if it doesn't exist
 os.makedirs("../documentation", exist_ok=True)
 
 def plot_history(history, model_name):
